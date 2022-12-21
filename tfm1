@@ -1,0 +1,159 @@
+pipeline{
+    agent {label 'jenkins-aws'}
+    environment {
+        currentDate = sh(returnStdout: true, script: 'date +%Y%m%d.%H%M%S').trim()
+    }
+    stages{
+        stage("checkout"){
+            steps{
+                checkout scm
+            }
+        }
+        stage("Parallel Tagging for TF"){
+            parallel {
+                stage("Nsl3Core-Tag"){
+                    
+                    when{
+                        expression {
+                            nslcore == "true"               
+                        }
+                    }
+                    steps{
+                        // script {
+                        // if ( nslcore == "true" ){
+                        sh "rm -rf nsl3core"
+                        sh "git clone git@10.10.1.37:fractal/nsl3core.git -b ${branch_name}"
+                        dir("./nsl3core/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("Nsl3Txn-Tag"){
+                    when{
+                        expression {
+                            nsltxn == "true"               
+                        }
+                    }
+                    steps{
+                        // script {
+                        // if ( nsltxn == "true" ){
+                        sh "rm -rf nsl3txn"
+                        sh "git clone git@10.10.1.37:fractal/nsl3txn.git -b ${branch_name}"
+                        dir("./nsl3txn/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("Nsl-Special-Features-Tag"){
+                    when{
+                        expression {
+                            nslspecialfeatures == "true"               
+                        }
+                    }
+                    steps{
+                        // script {
+                        // if ( nslspecialfeatures == "true" ){
+                        sh "rm -rf nsl-special-features"
+                        sh "git clone git@10.10.1.37:fractal/nsl-special-features.git -b ${branch_name}"
+                        dir("./nsl-special-features/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("Nsl-Reports-Tag"){
+                    when{
+                        expression {
+                            nslreports == "true"               
+                        }
+                    }
+                    steps{
+                        // script{
+                        // if ( nslreports == "true" ){
+                        sh "rm -rf nsl-reports"
+                        sh "git clone git@10.10.1.37:fractal/nsl-reports.git -b ${branch_name}"
+                        dir("./nsl-reports/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("Nsl-Translator-Tag"){
+                    when{
+                        expression {
+                            nsltranslator == "true"               
+                        }
+                    }
+                    steps{
+                        // script {
+                        // if ( nsltranslator == "true" ){
+                        sh "rm -rf nsl-translator"
+                        sh "git clone git@10.10.1.37:fractal/nsl-translator.git -b ${branch_name}"
+                        dir("./nsl-translator/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("nsl-special-features-batch"){
+                    when{
+                        expression {
+                            nslspecialfeaturesbatch == "true"               
+                        }
+                    }
+                    steps{
+                        // script{
+                        // if ( nslspecialfeaturesbatch == "true" ){
+                        sh "rm -rf nsl-special-features-batch"
+                        sh "git clone git@10.10.1.37:tf/nsl-special-features-batch.git -b ${branch_name}"
+                        dir("./nsl-special-features-batch/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+                stage("nsl-async-services"){
+                    when{
+                        expression {
+                            nslasyncservices == "true"               
+                        }
+                    }
+                    steps{
+                        // script{
+                        // if ( nslasyncservices == "true" ){
+                        sh "rm -rf nsl-async-services"
+                        sh "git clone git@10.10.1.37:fractal/nsl-async-services.git -b ${branch_name}"
+                        dir("./nsl-async-services/"){
+                            sh "git status"
+                            sh "git tag ${tag_name}"
+                            sh "git push origin ${tag_name}"
+                        }
+                        }
+                    // }
+                    // }
+                }
+            }
+        }
+    }
+}
+
